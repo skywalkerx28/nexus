@@ -42,6 +42,11 @@ class Writer {
    */
   uint64_t event_count() const { return event_count_; }
 
+  /**
+   * Get number of validation errors encountered.
+   */
+  uint64_t validation_errors() const;
+
  private:
   class Impl;
   std::unique_ptr<Impl> impl_;

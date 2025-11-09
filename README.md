@@ -197,6 +197,54 @@ nexus/
 
 ---
 
+## EventLog Usage
+
+### C++ Write Example
+
+```cpp
+#include "nexus/eventlog/writer.hpp"
+#include "nexus/eventlog/partitioner.hpp"
+#include "nexus/time.hpp"
+
+// Use Partitioner for canonical paths
+auto path = nexus::eventlog::Partitioner::get_path(
+    "data/parquet", "AAPL", nexus::time::wall_ns());
+nexus::eventlog::Writer writer(path);
+
+nexus::eventlog::Trade trade;
+trade.header.ts_event_ns = nexus::time::wall_ns();      // Wall-clock (exchange time)
+trade.header.ts_receive_ns = nexus::time::wall_ns();    // Wall-clock (our receive time)
+trade.header.ts_monotonic_ns = nexus::time::monotonic_ns();  // Monotonic (latency measurement)
+trade.header.venue = "NASDAQ";
+trade.header.symbol = "AAPL";
+trade.header.source = "IBKR";
+trade.header.seq = 1;
+trade.price = 178.50;
+trade.size = 100.0;
+trade.aggressor = nexus::eventlog::Aggressor::BUY;
+
+writer.append(trade);
+writer.flush();
+```
+
+### C++ Read Example
+
+```cpp
+#include "nexus/eventlog/reader.hpp"
+
+nexus::eventlog::Reader reader("data/parquet/AAPL/2025-01-09.parquet");
+
+while (auto event = reader.next()) {
+    std::visit([](auto&& e) {
+        std::cout << "Symbol: " << e.header.symbol << std::endl;
+    }, *event);
+}
+```
+
+See [EventLog Usage Guide](docs/eventlog-usage.md) for complete documentation.
+
+---
+
 ## Development
 
 ### Common Commands

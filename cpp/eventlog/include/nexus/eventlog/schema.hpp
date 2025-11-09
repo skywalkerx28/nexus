@@ -33,8 +33,9 @@ enum class OrderState : uint8_t {
 
 // Common fields for all events
 struct EventHeader {
-  int64_t ts_event_ns;    // Event timestamp (exchange/source time)
-  int64_t ts_receive_ns;  // Receive timestamp (our system time)
+  int64_t ts_event_ns;       // Event timestamp (exchange/source time, wall-clock)
+  int64_t ts_receive_ns;     // Receive timestamp (wall-clock, for audit/replay)
+  int64_t ts_monotonic_ns;   // Monotonic timestamp (for latency measurement)
   std::string venue;
   std::string symbol;
   std::string source;
