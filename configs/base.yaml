@@ -1,0 +1,32 @@
+# Base Nexus configuration
+# Override with paper.yaml or live.yaml
+
+environment: paper
+
+symbols:
+  - AAPL
+  - MSFT
+  - SPY
+
+ibkr:
+  host: "127.0.0.1"
+  port: 7497  # Paper trading port
+  client_id: 42
+  timeout_sec: 30
+
+storage:
+  parquet_dir: "./data/parquet"
+  log_dir: "./logs"
+
+risk:
+  max_notional: 100000
+  max_position: 500
+  price_band_bps: 50
+  max_orders_per_sec: 10
+  max_cancel_rate_bps: 3000
+
+ui:
+  observability_api: "http://localhost:9400"
+  auth_provider: "oidc"
+  ws_heartbeat_sec: 30
+

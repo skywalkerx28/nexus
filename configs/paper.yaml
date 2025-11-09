@@ -1,0 +1,22 @@
+# Paper trading configuration
+# Inherits from base.yaml
+
+environment: paper
+
+ibkr:
+  host: "127.0.0.1"
+  port: 7497  # Paper trading port
+  client_id: 42
+
+symbols:
+  - AAPL
+  - MSFT
+  - SPY
+  - TSLA
+  - GOOGL
+
+risk:
+  max_notional: 100000
+  max_position: 500
+  price_band_bps: 100  # More lenient for paper
+

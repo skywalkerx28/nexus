@@ -1,0 +1,21 @@
+# Live trading configuration
+# Inherits from base.yaml
+# WARNING: Use with extreme caution
+
+environment: live
+
+ibkr:
+  host: "127.0.0.1"
+  port: 7496  # Live trading port
+  client_id: 43
+
+symbols:
+  - AAPL  # Start with minimal symbols
+
+risk:
+  max_notional: 10000  # Conservative for initial live
+  max_position: 100
+  price_band_bps: 30  # Tight bands for safety
+  max_orders_per_sec: 5
+  max_cancel_rate_bps: 2000
+

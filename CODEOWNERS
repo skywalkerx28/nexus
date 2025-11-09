@@ -1,0 +1,30 @@
+# Nexus Code Owners
+# These owners will be requested for review when PRs modify their areas
+
+# Default owners for everything
+* @Skywalkerx
+
+# Core systems (C++)
+/cpp/eventlog/ @Skywalkerx
+/cpp/book/ @Skywalkerx
+/cpp/oms/ @Skywalkerx
+/cpp/risk/ @Skywalkerx
+/cpp/ingest/ @Skywalkerx
+
+# Python strategy & ML
+/py/nexus/strategy/ @Skywalkerx
+/py/nexus/ml/ @Skywalkerx
+/py/nexus/sim/ @Skywalkerx
+
+# Observability & Operations
+/ops/ @Skywalkerx
+
+# UI
+/ui/ @Skywalkerx
+
+# Docs & RFCs
+/docs/rfcs/ @Skywalkerx
+
+# CI/CD
+/.github/ @Skywalkerx
+
