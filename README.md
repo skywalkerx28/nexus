@@ -2,7 +2,7 @@
 
 **Syntropic's flagship, research-grade algorithmic trading platform**
 
-> *Excellence as a standard. Syntropy as a method. Victory as inevitable.*
+> *Automated, intelligent systems that turn market noise into self-improving, maintainable processes*
 
 [![Phase](https://img.shields.io/badge/Phase-0%20Complete-success)]()
 [![Status](https://img.shields.io/badge/Status-Ready%20for%20Phase%201-blue)]()
