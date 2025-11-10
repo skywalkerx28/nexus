@@ -6,9 +6,9 @@
 
 ---
 
-## ✅ Critical Fixes COMPLETE
+##  Critical Fixes COMPLETE
 
-### 1. README Timestamp Example ✅
+### 1. README Timestamp Example 
 - **Fixed:** Corrected timestamp semantics in README example
 - **Changes:**
   - `ts_event_ns = wall_ns()` (exchange time)
@@ -17,7 +17,7 @@
 - **Added:** Partitioner usage example
 - **File:** `README.md`
 
-### 2. Zero-Pad Partitioner Paths ✅
+### 2. Zero-Pad Partitioner Paths 
 - **Fixed:** Date paths now zero-padded for lexicographic ordering
 - **Format:** `{symbol}/YYYY/MM/DD.parquet` (was `YYYY/M/DD.parquet`)
 - **Benefits:**
@@ -30,9 +30,9 @@
 
 ---
 
-## ✅ P0 Upgrade #1: Decimal128 Fields COMPLETE
+##  P0 Upgrade #1: Decimal128 Fields COMPLETE
 
-### Implementation ✅
+### Implementation 
 - **Added:** 11 new decimal128 fields to schema
   - `price_decimal` (scale=6, μ precision)
   - `size_decimal` (scale=3, milli precision)
@@ -49,7 +49,7 @@
   - Scales by 10^scale
   - Rounds to nearest integer
 
-### Files Modified ✅
+### Files Modified 
 - `cpp/eventlog/src/arrow_schema.cpp` - Added 11 decimal fields
 - `cpp/eventlog/include/nexus/eventlog/arrow_schema.hpp` - Updated field indices (now 33 total)
 - `cpp/eventlog/src/writer.cpp` - Dual-write logic for all event types
@@ -71,7 +71,7 @@
 
 ---
 
-## 🔄 P0 Upgrades IN PROGRESS
+##  P0 Upgrades IN PROGRESS
 
 ### 2. Crash-Safety Marker (NEXT)
 - **Goal:** Add "finished" flag to metadata
@@ -101,7 +101,7 @@
 
 ---
 
-## 📝 Documentation Updates PENDING
+##  Documentation Updates PENDING
 
 ### RFC-001 Updates
 - **Add sections:**
@@ -117,7 +117,7 @@
 
 ---
 
-## 🧪 Testing PENDING
+##  Testing PENDING
 
 ### Decimal128 Tests
 - Round-trip: float64 → decimal128 → float64
@@ -137,7 +137,7 @@
 
 ---
 
-## 📊 Metrics
+##  Metrics
 
 ### Code Changes
 - **Files modified:** 7
@@ -159,30 +159,30 @@
 ## Timeline
 
 ### Saturday Morning (Complete)
-- ✅ Critical Fix #1: README timestamps
-- ✅ Critical Fix #2: Zero-pad paths
-- ✅ P0 Upgrade #1: Decimal128 dual-write
+-  Critical Fix #1: README timestamps
+-  Critical Fix #2: Zero-pad paths
+-  P0 Upgrade #1: Decimal128 dual-write
 
 ### Saturday Afternoon (Target)
-- 🔄 P0 Upgrade #2: Crash-safety marker
-- 🔄 P0 Upgrade #3: Writer instrumentation
-- 🔄 P0 Upgrade #4: Reader predicate scanning
+-  P0 Upgrade #2: Crash-safety marker
+-  P0 Upgrade #3: Writer instrumentation
+-  P0 Upgrade #4: Reader predicate scanning
 
 ### Saturday Evening (Target)
-- 📝 RFC-001 updates
-- 🧪 Comprehensive testing
-- 📊 Performance validation
+-  RFC-001 updates
+-  Comprehensive testing
+-  Performance validation
 
 ### Sunday (Buffer)
 - 🐛 Bug fixes if needed
-- 📚 Documentation polish
-- ✅ Final validation
+-  Documentation polish
+-  Final validation
 
 ---
 
 ## Readiness for Phase 1.1
 
-### Prerequisites ✅
+### Prerequisites 
 - [x] Critical fixes applied
 - [x] Decimal128 dual-write implemented
 - [ ] Crash-safety marker (in progress)

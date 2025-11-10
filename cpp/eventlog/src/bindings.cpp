@@ -1,6 +1,7 @@
 #include "nexus/eventlog/reader.hpp"
 #include "nexus/eventlog/schema.hpp"
 #include "nexus/eventlog/writer.hpp"
+#include "nexus/eventlog/partitioner.hpp"
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
@@ -43,22 +44,51 @@ PYBIND11_MODULE(eventlog_py, m) {
       .def(py::init<>())
       .def_readwrite("ts_event_ns", &EventHeader::ts_event_ns)
       .def_readwrite("ts_receive_ns", &EventHeader::ts_receive_ns)
+      .def_readwrite("ts_monotonic_ns", &EventHeader::ts_monotonic_ns)
       .def_readwrite("venue", &EventHeader::venue)
       .def_readwrite("symbol", &EventHeader::symbol)
       .def_readwrite("source", &EventHeader::source)
       .def_readwrite("seq", &EventHeader::seq);
 
+  // Trade
+  py::class_<Trade>(m, "Trade")
+      .def(py::init<>())
+      .def_readwrite("header", &Trade::header)
+      .def_readwrite("price", &Trade::price)
+      .def_readwrite("size", &Trade::size)
+      .def_readwrite("aggressor", &Trade::aggressor);
+
+  // DepthUpdate
+  py::class_<DepthUpdate>(m, "DepthUpdate")
+      .def(py::init<>())
+      .def_readwrite("header", &DepthUpdate::header)
+      .def_readwrite("side", &DepthUpdate::side)
+      .def_readwrite("price", &DepthUpdate::price)
+      .def_readwrite("size", &DepthUpdate::size)
+      .def_readwrite("level", &DepthUpdate::level)
+      .def_readwrite("op", &DepthUpdate::op);
+
   // Writer
   py::class_<Writer>(m, "Writer")
       .def(py::init<const std::string&>())
+      .def("append_trade", [](Writer& w, const Trade& t) { return w.append(t); })
+      .def("append_depth", [](Writer& w, const DepthUpdate& d) { return w.append(d); })
       .def("flush", &Writer::flush)
       .def("close", &Writer::close)
-      .def("event_count", &Writer::event_count);
+      .def("event_count", &Writer::event_count)
+      .def("validation_errors", &Writer::validation_errors);
 
   // Reader
   py::class_<Reader>(m, "Reader")
       .def(py::init<const std::string&>())
       .def("reset", &Reader::reset)
       .def("event_count", &Reader::event_count);
+  
+  // Partitioner
+  py::class_<Partitioner>(m, "Partitioner")
+      .def_static("get_path", 
+          py::overload_cast<const std::string&, const std::string&, int64_t>(
+              &Partitioner::get_path),
+          py::arg("base_dir"), py::arg("symbol"), py::arg("ts_ns"));
 }
 

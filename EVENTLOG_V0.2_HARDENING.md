@@ -1,4 +1,4 @@
-# EventLog v0.2 - Production Hardening COMPLETE ✅
+# EventLog v0.2 - Production Hardening COMPLETE 
 
 **Date:** 2025-01-09  
 **Status:** Critical fixes implemented  
@@ -12,7 +12,7 @@ EventLog v0.2 addresses **critical production blockers** identified in code revi
 
 ## Critical Fixes Implemented
 
-### 1. ✅ Streaming Reader (Correctness Fix)
+### 1.  Streaming Reader (Correctness Fix)
 
 **Problem:** v0.1 loaded entire table and assumed `chunk(0)`, breaking with multi-chunk files.
 
@@ -27,7 +27,7 @@ EventLog v0.2 addresses **critical production blockers** identified in code revi
 
 **Impact:** Can now read 100k+ event files without memory explosion or data corruption.
 
-### 2. ✅ Writer Flush Semantics (Data Safety Fix)
+### 2.  Writer Flush Semantics (Data Safety Fix)
 
 **Problem:** `flush()` closed writer; subsequent `append()` would truncate file.
 
@@ -42,7 +42,7 @@ EventLog v0.2 addresses **critical production blockers** identified in code revi
 
 **Impact:** Multiple flush cycles now safe; no data loss risk.
 
-### 3. ✅ Parent Directory Creation
+### 3.  Parent Directory Creation
 
 **Problem:** Writer failed if parent directory didn't exist.
 
@@ -55,7 +55,7 @@ EventLog v0.2 addresses **critical production blockers** identified in code revi
 
 **Impact:** No runtime failures from missing directories.
 
-### 4. ✅ Schema: `ts_monotonic_ns` Added
+### 4.  Schema: `ts_monotonic_ns` Added
 
 **Problem:** Only had `ts_event_ns` and `ts_receive_ns`; couldn't measure true ingest latency robustly.
 
@@ -78,7 +78,7 @@ EventLog v0.2 addresses **critical production blockers** identified in code revi
 
 **Impact:** Can now measure Data→Book latency accurately using monotonic timestamps.
 
-### 5. ✅ Large-File Tests
+### 5.  Large-File Tests
 
 **Problem:** No tests validated multi-batch read paths.
 
@@ -94,7 +94,7 @@ EventLog v0.2 addresses **critical production blockers** identified in code revi
 
 **Impact:** Validates streaming reader correctness and memory behavior at scale.
 
-### 6. ✅ CI Hardening
+### 6.  CI Hardening
 
 **Problem:** CI might fail if `lsb-release` or `wget` not preinstalled.
 
@@ -288,36 +288,36 @@ cmake --build build -j
 
 | Criterion | Status | Evidence |
 |-----------|--------|----------|
-| Streaming reader (no chunk(0)) | ✅ | `reader.cpp` refactored |
-| Writer flush semantics fixed | ✅ | `writer.cpp` refactored |
-| Parent dirs created | ✅ | `std::filesystem` added |
-| ts_monotonic_ns added | ✅ | Schema updated, all tests pass |
-| Large-file tests (>50k) | ✅ | `large_file_test.cpp` (4 tests) |
-| CI hardened | ✅ | lsb-release/wget installed |
-| All tests passing | ✅ | 200k+ events validated |
+| Streaming reader (no chunk(0)) |  | `reader.cpp` refactored |
+| Writer flush semantics fixed |  | `writer.cpp` refactored |
+| Parent dirs created |  | `std::filesystem` added |
+| ts_monotonic_ns added |  | Schema updated, all tests pass |
+| Large-file tests (>50k) |  | `large_file_test.cpp` (4 tests) |
+| CI hardened |  | lsb-release/wget installed |
+| All tests passing |  | 200k+ events validated |
 
 ---
 
 ## Sign-Off
 
-**EventLog v0.2:** ✅ **COMPLETE**  
-**Production Ready:** ✅ **YES** (for IBKR ingestion)  
-**Blockers:** ❌ **NONE**
+**EventLog v0.2:**  **COMPLETE**  
+**Production Ready:**  **YES** (for IBKR ingestion)  
+**Blockers:**  **NONE**
 
 ### Quality Gates
 
-- ✅ All C++ tests passing (golden + large-file)
-- ✅ Streaming reader validated (100k events)
-- ✅ Flush safety validated (multi-flush test)
-- ✅ Memory bounded (45MB for 100k events)
-- ✅ CI green with hardened dependencies
+-  All C++ tests passing (golden + large-file)
+-  Streaming reader validated (100k events)
+-  Flush safety validated (multi-flush test)
+-  Memory bounded (45MB for 100k events)
+-  CI green with hardened dependencies
 
 ### Performance Gates
 
-- ✅ Write throughput >100k events/sec
-- ✅ Read throughput >600k events/sec (improved)
-- ✅ Memory usage <50MB for 100k events (improved)
-- ✅ Compression ratio >5x
+-  Write throughput >100k events/sec
+-  Read throughput >600k events/sec (improved)
+-  Memory usage <50MB for 100k events (improved)
+-  Compression ratio >5x
 
 ---
 
@@ -325,5 +325,5 @@ cmake --build build -j
 
 **Compounding value:** Production-grade EventLog enables zero-loss capture at scale, deterministic replay for all downstream systems, and accurate latency measurement via monotonic timestamps.
 
-🚀 **Ready for Phase 1.1 - IBKR Ingestion.**
+ **Ready for Phase 1.1 - IBKR Ingestion.**
 

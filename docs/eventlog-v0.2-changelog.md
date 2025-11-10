@@ -285,11 +285,11 @@ ctest --output-on-failure
 **Team:** Nexus Platform  
 **Review:** Production hardening (2025-01-09)  
 **Testing:** 200k+ events validated  
-**Status:** ✅ Production Ready
+**Status:**  Production Ready
 
 ---
 
 **v0.2 represents world-class data ingestion engineering.**
 
-**Ready to capture markets at scale.** 🚀
+**Ready to capture markets at scale.** 
 

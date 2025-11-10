@@ -149,9 +149,11 @@ curl http://localhost:9400/health
 nexus/
 ├── cpp/                    # C++ core systems
 │   ├── time/              # Time utilities (monotonic + wall-clock)
-│   └── eventlog/          # EventLog (Parquet writer/reader)
+│   ├── eventlog/          # EventLog (Parquet writer/reader)
+│   └── ingest/ibkr/       # IBKR feed adapter
 ├── py/nexus/              # Python modules
-│   └── config.py          # Configuration management
+│   ├── config.py          # Configuration management
+│   └── ingest/            # Python ingestion adapters
 ├── ops/                   # Operations & observability
 │   └── observability_api/ # FastAPI service
 ├── ui/observatory/        # Next.js monitoring UI
@@ -161,7 +163,7 @@ nexus/
 │   ├── architecture.md    # System design
 │   ├── phase0-summary.md  # Phase 0 deliverables
 │   └── runbooks/          # Operational guides
-├── scripts/               # Development tools
+├── scripts/               # Launch, stop, and verification scripts
 └── .github/workflows/     # CI/CD pipelines
 ```
 
@@ -232,7 +234,7 @@ writer.flush();
 ```cpp
 #include "nexus/eventlog/reader.hpp"
 
-nexus::eventlog::Reader reader("data/parquet/AAPL/2025-01-09.parquet");
+nexus::eventlog::Reader reader("data/parquet/AAPL/2025/01/09.parquet");
 
 while (auto event = reader.next()) {
     std::visit([](auto&& e) {
@@ -242,6 +244,40 @@ while (auto event = reader.next()) {
 ```
 
 See [EventLog Usage Guide](docs/eventlog-usage.md) for complete documentation.
+
+---
+
+## IBKR Ingestion (Phase 1.1)
+
+### Launch Autonomous Ingestion
+
+```bash
+# Start ingestion (runs in background)
+./scripts/launch_monday.sh
+
+# Monitor logs
+tail -f logs/nexus_ingest_*.log
+
+# Stop gracefully
+./scripts/stop_ingestion.sh
+```
+
+### Verify Data
+
+```bash
+# Verify a specific day's data
+./build/cpp/ingest/ibkr/nexus_verify data/parquet/AAPL/2025/11/10.parquet
+
+# Check all files
+find data/parquet -name "*.parquet" -exec ls -lh {} \;
+```
+
+### Custom Symbols
+
+```bash
+# Override default symbols via environment variable
+SYMBOLS="AAPL MSFT GOOGL AMZN TSLA" ./scripts/launch_monday.sh
+```
 
 ---
 

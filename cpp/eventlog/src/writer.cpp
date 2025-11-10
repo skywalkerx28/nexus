@@ -60,6 +60,15 @@ class Writer::Impl {
           throw std::runtime_error("Failed to create Arrow builder: " + status.ToString());
         }
       }
+      
+      // Reserve capacity to avoid reallocs during append (performance optimization)
+      auto reserve_status = builder->Reserve(batch_size_);
+      if (!reserve_status.ok()) {
+        // Non-fatal: continue without reservation
+        std::cerr << "Warning: Failed to reserve builder capacity: " 
+                  << reserve_status.ToString() << std::endl;
+      }
+      
       builders_.push_back(std::move(builder));
     }
 
@@ -161,9 +170,21 @@ class Writer::Impl {
 
  private:
   // Helper: convert float64 to decimal128 (scale=6 for price, scale=3 for size)
-  arrow::Decimal128 to_decimal128(double value, int scale) {
-    // Convert float to fixed-point: value * 10^scale
-    int64_t scaled = static_cast<int64_t>(std::round(value * std::pow(10.0, scale)));
+  // Pre-computed scale multipliers for fast conversion
+  static constexpr std::array<double, 10> SCALE_MULTIPLIERS = {
+    1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0,
+    1000000.0, 10000000.0, 100000000.0, 1000000000.0
+  };
+
+  arrow::Decimal128 to_decimal128(double value, int scale) noexcept {
+    // Fast path: check for non-finite values
+    if (!std::isfinite(value)) [[unlikely]] {
+      return arrow::Decimal128(0);
+    }
+    
+    // Use pre-computed multiplier (no pow call!)
+    const double multiplier = SCALE_MULTIPLIERS[scale];
+    const int64_t scaled = static_cast<int64_t>(std::round(value * multiplier));
     return arrow::Decimal128(scaled);
   }
 

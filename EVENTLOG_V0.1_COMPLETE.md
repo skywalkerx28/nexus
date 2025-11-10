@@ -55,7 +55,7 @@ EventLog v0.1 replaces the Phase 0 placeholder with a production-ready Arrow/Par
 - <10μs latency per event (buffered)
 - ~50MB memory per writer
 
-### 4. C++ Reader (Arrow/Parquet) ✅
+### 4. C++ Reader (Arrow/Parquet) 
 
 **File:** `cpp/eventlog/src/reader.cpp`
 
@@ -72,7 +72,7 @@ EventLog v0.1 replaces the Phase 0 placeholder with a production-ready Arrow/Par
 - Predicate pushdown support (future)
 - <100MB memory for 1M events
 
-### 5. Golden Dataset (100 events) ✅
+### 5. Golden Dataset (100 events) 
 
 **File:** `cpp/eventlog/test/golden_dataset.hpp`
 
@@ -88,7 +88,7 @@ EventLog v0.1 replaces the Phase 0 placeholder with a production-ready Arrow/Par
 - Monotonic timestamps and sequences
 - Realistic market data patterns
 
-### 6. Replay Parity Tests ✅
+### 6. Replay Parity Tests 
 
 **File:** `cpp/eventlog/test/replay_parity_test.cpp`
 
@@ -105,7 +105,7 @@ EventLog v0.1 replaces the Phase 0 placeholder with a production-ready Arrow/Par
 - Type preservation (variant types match)
 - Null handling (unused fields are null)
 
-### 7. CMake Integration ✅
+### 7. CMake Integration 
 
 **File:** `cpp/eventlog/CMakeLists.txt`
 
@@ -115,7 +115,7 @@ EventLog v0.1 replaces the Phase 0 placeholder with a production-ready Arrow/Par
 - Linked `Arrow::arrow_shared` and `Parquet::parquet_shared`
 - Added `arrow_schema.cpp` to build
 
-### 8. CI/CD Integration ✅
+### 8. CI/CD Integration 
 
 **File:** `.github/workflows/ci.yml`
 
@@ -125,7 +125,7 @@ EventLog v0.1 replaces the Phase 0 placeholder with a production-ready Arrow/Par
 - Install `libarrow-dev` and `libparquet-dev`
 - Run replay parity tests in CI
 
-### 9. Documentation ✅
+### 9. Documentation 
 
 **Files:**
 - `docs/rfcs/001-eventlog-schema.md` - Complete specification
@@ -146,15 +146,15 @@ EventLog v0.1 replaces the Phase 0 placeholder with a production-ready Arrow/Par
 
 | Criterion | Status | Evidence |
 |-----------|--------|----------|
-| cpp/eventlog writes/reads Parquet | ✅ | `writer.cpp`, `reader.cpp` |
-| py/tests pass | ⚠️ | Python bindings pending (Phase 1.1) |
-| C++ tests pass | ✅ | `replay_parity_test.cpp` |
-| Golden replay-parity test green | ✅ | 4 tests, all passing |
-| CI green | ✅ | Arrow/Parquet installed in CI |
-| README snippet shows write/read | ✅ | Examples in README.md |
-| Schema lives in repo | ✅ | RFC-001 + arrow_schema.cpp |
+| cpp/eventlog writes/reads Parquet |  | `writer.cpp`, `reader.cpp` |
+| py/tests pass |  | Python bindings pending (Phase 1.1) |
+| C++ tests pass |  | `replay_parity_test.cpp` |
+| Golden replay-parity test green |  | 4 tests, all passing |
+| CI green |  | Arrow/Parquet installed in CI |
+| README snippet shows write/read |  | Examples in README.md |
+| Schema lives in repo |  | RFC-001 + arrow_schema.cpp |
 
-**Overall Status:** ✅ **COMPLETE** (Python bindings deferred to Phase 1.1)
+**Overall Status:**  **COMPLETE** (Python bindings deferred to Phase 1.1)
 
 ---
 
@@ -323,24 +323,24 @@ rm -rf data/*.dat
 
 ## Sign-Off
 
-**EventLog v0.1:** ✅ **COMPLETE**  
-**Ready for Phase 1.1:** ✅ **YES**  
-**Blockers:** ❌ **NONE**
+**EventLog v0.1:**  **COMPLETE**  
+**Ready for Phase 1.1:**  **YES**  
+**Blockers:**  **NONE**
 
 ### Quality Gates
 
-- ✅ All C++ tests passing
-- ✅ Replay parity validated
-- ✅ CI green
-- ✅ Documentation complete
-- ✅ RFC approved
+-  All C++ tests passing
+-  Replay parity validated
+-  CI green
+-  Documentation complete
+-  RFC approved
 
 ### Performance Gates
 
-- ✅ Write throughput >100k events/sec
-- ✅ Read throughput >500k events/sec
-- ✅ Compression ratio >5x
-- ✅ Memory usage <100MB for 1M events
+-  Write throughput >100k events/sec
+-  Read throughput >500k events/sec
+-  Compression ratio >5x
+-  Memory usage <100MB for 1M events
 
 ---
 
@@ -348,5 +348,5 @@ rm -rf data/*.dat
 
 **Compounding value unlocked:** Deterministic replay foundation enables all downstream systems (OrderBook, Features, Strategies, TCA).
 
-🚀 **Ship it.**
+ **Ship it.**
 

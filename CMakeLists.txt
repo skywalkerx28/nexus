@@ -56,6 +56,7 @@ enable_testing()
 # Add subdirectories
 add_subdirectory(cpp/time)
 add_subdirectory(cpp/eventlog)
+add_subdirectory(cpp/ingest/ibkr)
 
 # Summary
 message(STATUS "Nexus Configuration:")
