@@ -21,8 +21,15 @@ class EventLogTest : public ::testing::Test {
 };
 
 TEST_F(EventLogTest, WriterCreatesFile) {
-  Writer writer(test_file_);
+  {
+    Writer writer(test_file_);
+    // During write, only .partial file exists (atomic write)
+    EXPECT_TRUE(fs::exists(test_file_ + ".partial"));
+    EXPECT_FALSE(fs::exists(test_file_));  // Final file not yet created
+  }
+  // After close, final file exists and .partial is removed
   EXPECT_TRUE(fs::exists(test_file_));
+  EXPECT_FALSE(fs::exists(test_file_ + ".partial"));
 }
 
 TEST_F(EventLogTest, WriteAndCount) {

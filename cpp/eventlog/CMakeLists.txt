@@ -43,3 +43,11 @@ add_executable(large_file_test test/large_file_test.cpp)
 target_link_libraries(large_file_test PRIVATE nexus_eventlog GTest::gtest_main)
 add_test(NAME LargeFileTest COMMAND large_file_test)
 
+add_executable(reader_filter_test test/reader_filter_test.cpp)
+target_link_libraries(reader_filter_test PRIVATE nexus_eventlog GTest::gtest_main)
+add_test(NAME ReaderFilterTest COMMAND reader_filter_test)
+
+add_executable(io_pruning_test test/io_pruning_test.cpp)
+target_link_libraries(io_pruning_test PRIVATE nexus_eventlog GTest::gtest_main)
+add_test(NAME IOPruningTest COMMAND io_pruning_test)
+

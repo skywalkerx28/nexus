@@ -363,7 +363,7 @@ mkdir -p cpp/ingest/ibkr
 ```bash
 # Build book from golden dataset
 # Assert state matches expected
-# Measure replay latency
+# Measure replay latency 
 ```
 
 ---

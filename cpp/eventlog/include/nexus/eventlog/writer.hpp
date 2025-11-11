@@ -47,6 +47,18 @@ class Writer {
    */
   uint64_t validation_errors() const;
 
+  /**
+   * Set ingest session ID for provenance tracking.
+   * Must be called before first write.
+   */
+  void set_ingest_session_id(const std::string& session_id);
+
+  /**
+   * Set feed mode (live/delayed) for metadata.
+   * Must be called before first write.
+   */
+  void set_feed_mode(const std::string& feed_mode);
+
  private:
   class Impl;
   std::unique_ptr<Impl> impl_;

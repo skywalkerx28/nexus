@@ -12,6 +12,7 @@ std::map<std::string, std::string> FileMetadata::to_map() const {
   map["schema_version"] = schema_version;
   map["nexus_version"] = nexus_version;
   map["ingest_session_id"] = ingest_session_id;
+  map["feed_mode"] = feed_mode;
   map["ingest_start_ns"] = std::to_string(ingest_start_ns);
   map["ingest_end_ns"] = std::to_string(ingest_end_ns);
   map["symbol"] = symbol;
@@ -33,6 +34,7 @@ FileMetadata FileMetadata::from_map(const std::map<std::string, std::string>& ma
   meta.schema_version = get("schema_version");
   meta.nexus_version = get("nexus_version");
   meta.ingest_session_id = get("ingest_session_id");
+  meta.feed_mode = get("feed_mode");
 
   auto start_str = get("ingest_start_ns");
   if (!start_str.empty()) {

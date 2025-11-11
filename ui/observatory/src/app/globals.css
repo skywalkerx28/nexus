@@ -2,28 +2,189 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * Nexus Observatory - Pure Terminal Aesthetic
+ * Dark Mode: Black bg (#000), white text (#fff)
+ * Light Mode: White bg (#fff), black text (#000)
+ * Wall Street terminal of the future
+ */
+
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 10, 14, 39;
-  --background-end-rgb: 5, 8, 18;
+  --background: #ffffff;
+  --foreground: #000000;
+}
+
+:root.dark {
+  --background: #000000;
+  --foreground: #ffffff;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Courier New', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Custom scrollbar - adapts to theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.3);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.5);
+}
+
+/* Dark mode scrollbar */
+:root.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+:root.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Light mode scrollbar */
+:root:not(.dark) ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+:root:not(.dark) ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Tabular numbers for all numeric data */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Selection color - adapts to theme */
+::selection {
+  background: rgba(128, 128, 128, 0.3);
+  color: var(--foreground);
+}
+
+:root.dark ::selection {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+:root:not(.dark) ::selection {
+  background: rgba(0, 0, 0, 0.2);
+  color: #000000;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Glassmorphism support */
+@supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
+  .backdrop-blur-sm {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .backdrop-blur-md {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .backdrop-blur-xl {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+}
+
+/* Hide scrollbar for ticker bar and other horizontal scrolling elements */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ticker scroll animation - smooth horizontal auto-scroll */
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-scroll {
+  animation: ticker-scroll 90s linear infinite;
+  will-change: transform;
+}
+
+/* Pause animation on hover for easier reading */
+.ticker-scroll:hover {
+  animation-play-state: paused;
+}
+
+/* Mapbox GL overrides for terminal aesthetic */
+.mapboxgl-popup-content {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.mapboxgl-popup-tip {
+  display: none !important;
+}
+
+.mapboxgl-popup-close-button {
+  display: none !important;
+}
+
+/* Mapbox attribution - minimal but compliant */
+.mapboxgl-ctrl-attrib {
+  font-size: 8px !important;
+  opacity: 0.4 !important;
+  background-color: transparent !important;
+}
+
+.mapboxgl-ctrl-attrib a {
+  color: inherit !important;
+}
+
+.mapboxgl-ctrl-logo {
+  opacity: 0.3 !important;
+  width: 65px !important;
+  height: 20px !important;
+}
+
+/* Mapbox controls styling */
+.mapboxgl-ctrl-group button {
+  background-color: var(--background) !important;
+  border-color: rgba(128, 128, 128, 0.2) !important;
+}
+
+.mapboxgl-ctrl-group button:hover {
+  background-color: rgba(128, 128, 128, 0.1) !important;
+}
+
+:root.dark .mapboxgl-ctrl-group button {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+:root.dark .mapboxgl-ctrl-group button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
 }
 

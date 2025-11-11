@@ -76,13 +76,45 @@ PYBIND11_MODULE(eventlog_py, m) {
       .def("flush", &Writer::flush)
       .def("close", &Writer::close)
       .def("event_count", &Writer::event_count)
-      .def("validation_errors", &Writer::validation_errors);
+      .def("validation_errors", &Writer::validation_errors)
+      .def("set_ingest_session_id", &Writer::set_ingest_session_id)
+      .def("set_feed_mode", &Writer::set_feed_mode);
 
   // Reader
   py::class_<Reader>(m, "Reader")
       .def(py::init<const std::string&>())
       .def("reset", &Reader::reset)
-      .def("event_count", &Reader::event_count);
+      .def("event_count", &Reader::event_count)
+      .def("row_group_count", &Reader::row_group_count)
+      .def("row_groups_touched", &Reader::row_groups_touched)
+      .def("set_time_range", &Reader::set_time_range)
+      .def("set_seq_range", &Reader::set_seq_range)
+      .def("clear_filters", &Reader::clear_filters)
+      .def("get_metadata", [](const Reader& r) {
+        // Convert FileMetadata to Python dict for usability
+        auto metadata = r.get_metadata();
+        auto metadata_map = metadata.to_map();
+        py::dict result;
+        for (const auto& [key, value] : metadata_map) {
+          result[py::str(key)] = py::str(value);
+        }
+        return result;
+      });
+  
+  // FileMetadata
+  py::class_<FileMetadata>(m, "FileMetadata")
+      .def(py::init<>())
+      .def_readonly("schema_version", &FileMetadata::schema_version)
+      .def_readonly("nexus_version", &FileMetadata::nexus_version)
+      .def_readonly("ingest_session_id", &FileMetadata::ingest_session_id)
+      .def_readonly("feed_mode", &FileMetadata::feed_mode)
+      .def_readonly("ingest_start_ns", &FileMetadata::ingest_start_ns)
+      .def_readonly("ingest_end_ns", &FileMetadata::ingest_end_ns)
+      .def_readonly("symbol", &FileMetadata::symbol)
+      .def_readonly("venue", &FileMetadata::venue)
+      .def_readonly("source", &FileMetadata::source)
+      .def_readonly("ingest_host", &FileMetadata::ingest_host)
+      .def_readonly("write_complete", &FileMetadata::write_complete);
   
   // Partitioner
   py::class_<Partitioner>(m, "Partitioner")

@@ -83,13 +83,13 @@ curl http://localhost:9400/health
 ### System Components
 
 ```
-[IB Gateway] ⇄ [FeedAdapter] → [EventLog (Parquet)] → [Replay/Simulator]
-                                        ↓
-                    [OrderBook L1/L2] → [Features] → [Strategy Engine]
-                                        ↓
-                    [OMS] → [Risk Gate] → [Execution]
-                                        ↓
-                    [Observability API] → [Observatory UI]
+[IB Gateway] <-> [FeedAdapter] --> [EventLog (Parquet)] --> [Replay/Simulator]
+                                        |
+                    [OrderBook L1/L2] --> [Features] --> [Strategy Engine]
+                                        |
+                    [OMS] --> [Risk Gate] --> [Execution]
+                                        |
+                    [Observability API] --> [Observatory UI]
 ```
 
 ### Core Modules

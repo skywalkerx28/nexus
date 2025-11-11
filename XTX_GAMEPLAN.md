@@ -3,7 +3,7 @@ Based on their public information and job descriptions, XTX Markets practices se
 
 Today, their methods are far more advanced and are built on three main pillars.
 
-### 1. 🧠 Deep Learning for Time-Series Forecasting
+### 1. Deep Learning for Time-Series Forecasting
 
 This is their core business: predicting short-term price movements.
 
@@ -109,3 +109,34 @@ Cross-Asset Signals: This is their biggest edge. The health of a company's stock
 News & Sentiment: Their NLP models "read" news feeds. If a positive earnings report is released, the models will adjust their bond price forecasts upwards before most human traders have finished reading the headline.
 
 In short, XTX isn't "investing" in fixed income. They are a high-speed, data-driven middleman that uses AI to predict very short-term price movements and get paid for providing liquidity to the market.
+
+
+-- Trading commodities -- 
+
+When you trade commodities like coffee, crude oil, or gold, you are almost never buying the physical item. You're not going to get a barrel of oil or a bar of gold delivered to your house.
+
+Instead, you are trading futures contracts.
+
+What is a Futures Contract?
+A futures contract is an agreement to buy or sell a specific amount of a commodity at a set price on a future date.
+
+The Goal: Most traders are just speculating on the price. They will buy a futures contract hoping the price of that commodity (e.g., corn) goes up. They then sell the contract for a profit before the expiration date. They never own the physical corn.
+
+The "How": This is all done on specialized exchanges, like the CME (Chicago Mercantile Exchange) or COMEX (mentioned in your screenshot for Gold).
+
+How Firms Like XTX Trade Them
+A high-frequency firm like XTX trades these futures contracts in the same way it trades stocks:
+
+Data-Driven: They use their machine learning models to forecast the price of a corn futures contract for the next few seconds or minutes.
+
+Speed: They execute thousands of trades per day, aiming to make a tiny profit on each trade by predicting the short-term direction of the price.
+
+Data Sources: Their models would analyze data like:
+
+Weather reports (which affect crops like corn and coffee)
+
+Geopolitical news (which affects crude oil)
+
+Shipping and supply chain data
+
+The "order book" for the futures contracts themselves

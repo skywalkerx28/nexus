@@ -6,7 +6,7 @@
 MISSION & NORTH STAR
 ============================================================
 Nexus is Syntropic’s flagship, research-grade algorithmic trading platform.
-Goal: Build the world's best algorithmic trading platform that competes with xtx markets. Trade worldwide, monetize tiny, reliable edges at scale through an automated, intelligent core of models and a deterministic, low-latency execution stack. Develop machine learning techniques, trading algorithms and market sentiment tools that will enable nexus to produce price forecasts for over 50,000 financial instruments.
+Goal: Build the world's best algorithmic trading platform that competes with xtx markets. Trade worldwide, monetize tiny, reliable edges at scale through an automated, intelligent core of models and a deterministic, low-latency execution stack. Develop machine learning techniques that pushes the boundaries of the current state of ai/ml, trading algorithms and market sentiment tools that will enable nexus to produce price forecasts for over 50,000 financial instruments. Syntropic has excellence/world-class standards for coding, mathematics and speed of execution.
 Profits fund Syntropic’s broader missions (defense, health, frontier R&D).
 
 Excellence standard:
@@ -31,15 +31,15 @@ Non-goals (early):
 ============================================================
 SYSTEM ARCHITECTURE (MENTAL MODEL)
 ============================================================
-[TWS/IB Gateway] ⇄ [FeedAdapter::IBKR] → [EventLog (Parquet, append-only)]
-                                           ↘
-                                            [Replay] → [Simulator (discrete-event LOB)]
-                                           ↘
-[OrderBook (L1/L2, C++)] → [Features (C++)] → [Strategy Engine (Python)] → [OMS (C++)] → [OmsAdapter::IBKR]
-                                                ↘                               ↘
+[TWS/IB Gateway] <-> [FeedAdapter::IBKR] --> [EventLog (Parquet, append-only)]
+                                           \
+                                            [Replay] --> [Simulator (discrete-event LOB)]
+                                           \
+[OrderBook (L1/L2, C++)] --> [Features (C++)] --> [Strategy Engine (Python)] --> [OMS (C++)] --> [OmsAdapter::IBKR]
+                                                \                               \
                                                [Risk Gate (C++)]                 [TCA / Metrics / Alerts]
-                                                                            ↘
-                                                                  [Observability API] → [Nexus UI "Observatory"]
+                                                                            \
+                                                                  [Observability API] --> [Nexus UI "Observatory"]
 
 Hard rule: Strategies never talk to brokers or feeds directly—only via stable interfaces.
 
@@ -92,7 +92,7 @@ Live inference: compact, deterministic models (trees/linear/small NN or distille
 OBSERVABILITY & THE NEXUS UI ("OBSERVATORY")
 ============================================================
 - The Observatory is the ONLY visualization/control surface.
-- Observability API exposes: metrics (Prometheus/OpenMetrics), logs (structured JSON), events (orders, LOB thumbnails, alerts).
+- Observability API exposes: metrics (Prometheus/OpenMetrics), logs (structured JSON), events (orders, LOB thumbnails, alerts), performance metrics, network latency metrics, world markets view (an interactive dynamic and automated map using mapbox). 
 - UI features by phase:
   * MVP: system health, per-symbol tiles (spread, trades), latency SLOs, logs.
   * L2/Features: mini LOB, imbalance gauges, microprice vs mid.

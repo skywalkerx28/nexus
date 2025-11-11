@@ -14,6 +14,7 @@ struct FileMetadata {
   std::string schema_version = "1.0";
   std::string nexus_version = "0.2.0";
   std::string ingest_session_id;  // UUID for deduplication
+  std::string feed_mode;          // "live" or "delayed"
   int64_t ingest_start_ns = 0;    // First event timestamp
   int64_t ingest_end_ns = 0;      // Last event timestamp
   std::string symbol;             // Primary symbol

@@ -1,6 +1,6 @@
 # Nexus
 
-**Nexus** is Syntropic’s flagship, research-grade algorithmic trading platform—an engine designed to **bootstrap the company’s financial independence** and continuously fund Syntropic’s broader missions in **defense, health, and frontier R&D**. Nexus embodies our core philosophy of **excellence**: software and models engineered to *convert market chaos into ordered, measurable decisions* through **state-of-the-art ML/AI** and **deterministic, low-latency execution**. Nexus will remove all sentimental and human weaknesses from the trading loops. Building a 100% algorithmic-backed program that uses mathematical excellence, ai/ml models and logic for daily trades.
+**Nexus** is Syntropic’s flagship, research-grade algorithmic trading platform —an engine designed to **bootstrap the company’s financial independence** and continuously fund Syntropic’s broader missions in **defense, health, and frontier R&D**. Nexus embodies our core philosophy of **excellence**: software and models engineered to *convert market chaos into ordered, measurable decisions* through **state-of-the-art ML/AI** and **deterministic, low-latency execution**. Nexus will remove all sentimental and human weaknesses from the trading loops. Building a 100% algorithmic-backed program that uses mathematical excellence, ai/ml models and logic for daily trades.
 
 Nexus is built in **phases**. We start on IBKR (US equities), master lossless data, reproducible research, and safe execution; then graduate to **DMA/direct feeds**, **proximity/co-location**, **global multi-asset routing**, and **world-class, compliant data ingestion** (including web/alt-data pipelines) as measured edge and latency requirements justify. The end state is a **self-reinforcing financial engine**: trading profits → compute & data upgrades → smarter models → better trades → more profits—powering Syntropic’s long-term vision.
 
@@ -100,17 +100,17 @@ Leaders like XTX (public signals) operate **industrial-scale data ingestion** (i
 ## System Architecture
 
 ```
-[TWS / IB Gateway]  ⇄  [FeedAdapter::IBKR]  →  [EventLog (Parquet, append-only)]
-                                              ↘
-                                               [Replay] → [Simulator (discrete-event LOB)]
-                                              ↘
-[OrderBook (L1/L2, C++)] → [Features (C++)] → [Strategy Engine (Python)] → [OMS (C++)] → [OmsAdapter::IBKR]
-                                                   ↘                         ↘
+[TWS / IB Gateway] <-> [FeedAdapter::IBKR] --> [EventLog (Parquet, append-only)]
+                                              \
+                                               [Replay] --> [Simulator (discrete-event LOB)]
+                                              \
+[OrderBook (L1/L2, C++)] --> [Features (C++)] --> [Strategy Engine (Python)] --> [OMS (C++)] --> [OmsAdapter::IBKR]
+                                                   \                         \
                                                   [Risk Gate (C++)]           [TCA / Metrics / Alerts]
-                                                                          ↘
+                                                                          \
                                                                   [Observability API]
-                                                                          ↘
-                                                          [Nexus UI (“Observatory”)]
+                                                                          \
+                                                          [Nexus UI ("Observatory")]
 ```
 
 **Observability Data Plane**
@@ -226,7 +226,7 @@ Leaders like XTX (public signals) operate **industrial-scale data ingestion** (i
 
   * Multi-venue views, global symbol search, RBAC (Ops/Research/ReadOnly).
   * Saved investigations and sharable forensics links.
-    **Exit:** p99 variance ↓30–50%; replay regression suite green; one-click strategy rollback; UI handles fleet-scale views.
+    **Exit:** p99 variance reduced 30–50%; replay regression suite green; one-click strategy rollback; UI handles fleet-scale views.
 
 ### Phase 8 — Low-Latency Track (Parallel R&D)
 

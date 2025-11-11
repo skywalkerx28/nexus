@@ -10,6 +10,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <unistd.h>
+#include <fcntl.h>
 #include <limits.h>
 
 namespace nexus::eventlog {
@@ -18,12 +19,16 @@ namespace nexus::eventlog {
 class Writer::Impl {
  public:
   explicit Impl(const std::string& filepath)
-      : filepath_(filepath),
+      : final_filepath_(filepath),
         batch_size_(10000),
         current_batch_(0),
         closed_(false),
         total_rows_written_(0),
         validation_errors_(0) {
+    // Use atomic write: write to temp file, then rename on successful close
+    temp_filepath_ = final_filepath_ + ".partial";
+    filepath_ = temp_filepath_;  // Write to temp path
+    
     schema_ = ArrowSchema::get_schema();
     builders_.reserve(schema_->num_fields());
 
@@ -39,11 +44,14 @@ class Writer::Impl {
     }
 
     // Ensure parent directory exists
-    std::filesystem::path path(filepath_);
+    std::filesystem::path path(final_filepath_);
     auto parent = path.parent_path();
     if (!parent.empty() && !std::filesystem::exists(parent)) {
       std::filesystem::create_directories(parent);
     }
+    
+    // Remove any existing partial file
+    std::filesystem::remove(temp_filepath_);
 
     // Create builders for each field
     for (int i = 0; i < schema_->num_fields(); ++i) {
@@ -161,12 +169,65 @@ class Writer::Impl {
       writer_.reset();
     }
 
+    // Atomic rename: move temp file to final location
+    // This ensures incomplete files are never visible at the final path
+    std::error_code ec;
+    std::filesystem::rename(temp_filepath_, final_filepath_, ec);
+    if (ec) {
+      throw std::runtime_error("Failed to atomically rename file: " + ec.message());
+    }
+
+    // Durability guarantee: fsync parent directory to persist rename metadata
+    // Without this, rename may be lost on power failure before kernel flush
+    // Note: macOS requires F_FULLFSYNC instead of fsync for directories
+    try {
+      std::filesystem::path final_path(final_filepath_);
+      auto parent_dir = final_path.parent_path();
+      
+      // Open parent directory for fsync
+      int dir_fd = ::open(parent_dir.c_str(), O_RDONLY);
+      if (dir_fd >= 0) {
+#ifdef __APPLE__
+        // macOS: use F_FULLFSYNC (fsync on dir returns EINVAL)
+        if (::fcntl(dir_fd, F_FULLFSYNC) != 0 && errno != ENOTSUP) {
+          // ENOTSUP is acceptable (some filesystems don't support it)
+          std::cerr << "Warning: F_FULLFSYNC(parent_dir) failed: " << std::strerror(errno) << std::endl;
+        }
+#else
+        // Linux/other: standard fsync
+        if (::fsync(dir_fd) != 0) {
+          std::cerr << "Warning: fsync(parent_dir) failed: " << std::strerror(errno) << std::endl;
+        }
+#endif
+        ::close(dir_fd);
+      }
+      // Non-fatal if fsync fails (better than nothing)
+    } catch (...) {
+      // Ignore fsync errors (already renamed, this is durability insurance)
+    }
+
     closed_ = true;
   }
 
   uint64_t rows_written() const { return total_rows_written_; }
 
   uint64_t validation_errors() const { return validation_errors_; }
+  
+  void set_ingest_session_id(const std::string& session_id) {
+    if (total_rows_written_ > 0) {
+      std::cerr << "Warning: set_ingest_session_id called after writes; "
+                << "metadata may be incomplete" << std::endl;
+    }
+    metadata_.ingest_session_id = session_id;
+  }
+  
+  void set_feed_mode(const std::string& feed_mode) {
+    if (total_rows_written_ > 0) {
+      std::cerr << "Warning: set_feed_mode called after writes; "
+                << "metadata may be incomplete" << std::endl;
+    }
+    metadata_.feed_mode = feed_mode;
+  }
 
  private:
   // Helper: convert float64 to decimal128 (scale=6 for price, scale=3 for size)
@@ -394,10 +455,29 @@ class Writer::Impl {
                                outfile_result.status().ToString());
     }
 
-    // Build Parquet properties
+    // Build Parquet properties with production tuning
     parquet::WriterProperties::Builder props_builder;
     props_builder.compression(parquet::Compression::ZSTD);
     props_builder.compression_level(3);
+    
+    // Row-group size: smaller groups for better pruning effectiveness
+    // Target ~50MB row groups for balance between:
+    // - Query pruning effectiveness (granular time ranges)
+    // - Compression ratio (larger = better compression)
+    // - Metadata size (more groups = more overhead)
+    // Assuming ~200 bytes/row average, 250k rows ≈ 50MB
+    props_builder.max_row_group_length(250000);
+    
+    // Data page size: 1MB for good compression/decompression granularity
+    props_builder.data_pagesize(1024 * 1024);
+    
+    // Dictionary encoding for repetitive string columns
+    props_builder.enable_dictionary();
+    
+    // Note: Bloom filters are configured per-column via ColumnProperties
+    // in Arrow 21.0+. For now, we rely on dictionary encoding and 
+    // row-group statistics for predicate pushdown.
+    // TODO: Add column-specific Bloom filters in next iteration
 
     // Build Arrow properties with metadata
     auto metadata_map = metadata_.to_map();
@@ -458,7 +538,9 @@ class Writer::Impl {
     current_batch_ = 0;
   }
 
-  std::string filepath_;
+  std::string filepath_;        // Temp path during write
+  std::string temp_filepath_;   // .partial path
+  std::string final_filepath_;  // Final destination path
   std::shared_ptr<arrow::Schema> schema_;
   std::vector<std::unique_ptr<arrow::ArrayBuilder>> builders_;
   std::unique_ptr<parquet::arrow::FileWriter> writer_;
@@ -496,6 +578,18 @@ void Writer::close() {
 
 uint64_t Writer::validation_errors() const {
   return impl_ ? impl_->validation_errors() : 0;
+}
+
+void Writer::set_ingest_session_id(const std::string& session_id) {
+  if (impl_) {
+    impl_->set_ingest_session_id(session_id);
+  }
+}
+
+void Writer::set_feed_mode(const std::string& feed_mode) {
+  if (impl_) {
+    impl_->set_feed_mode(feed_mode);
+  }
 }
 
 }  // namespace nexus::eventlog
