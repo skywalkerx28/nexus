@@ -42,6 +42,11 @@ const NAV_ITEMS: NavItem[] = [
     description: 'System health & metrics',
   },
   {
+    label: 'Ontology',
+    path: '/ontology',
+    description: 'Entity graph & data quality',
+  },
+  {
     label: 'Development',
     path: '/development',
     description: 'Build & deployment status',
